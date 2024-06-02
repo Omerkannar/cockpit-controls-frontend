@@ -1,0 +1,18 @@
+[
+    {
+        "key": "0",
+        "type": "Analog",
+        "beckend_name":"EPU_FUEL_LEVEL",
+        "row":"1",
+        "column":"1",
+        "width": "375",
+        "left":"0",
+        "top": "0",
+        "offset_left": "0",
+        "offset_top": "0",
+        "image_on": null,
+        "value_to_extarpolate": "20",
+        "image_off": "/resources/EPUFuelPanel/EPU_Fuel_1.png",
+        "zero_rotation": "0"
+    }
+]
