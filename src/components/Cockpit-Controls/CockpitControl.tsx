@@ -22,7 +22,8 @@ export const CockpitControl = () => {
     const [temp, setTemp] = useState(0);
     const [communicationWithServer, setCommunicationWithServer] = useState(false)
     const [dataFromBE, setDataFromBE] = React.useState({});
-    const debugMode : boolean = true;
+    const [interiorLightsdataFromBE, setInteriorLightsDataFromBE] = React.useState({});
+    const debugMode: boolean = true;
 
 
     useEffect(() => {
@@ -36,7 +37,39 @@ export const CockpitControl = () => {
 
     useEffect(() => {
         handleTextFromBEChange()
+        handleInteriorLightsFromBEChange()
     }, [temp]);
+
+
+    const handleInteriorLightsFromBEChange = () => {
+        fetch("http://127.0.0.1:5000/getInteriorLightPanelData", {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'accept': '*/*'
+            }
+        })
+            .then(Response => Response.json()
+                , error => {
+                    console.log('Unable to fetch data')
+                    setCommunicationWithServer(false)
+                }
+            )
+            .then(data => {
+                //handleParseMessageFromBE(data)
+                if (data !== undefined) {
+                    setCommunicationWithServer(true)
+                    setInteriorLightsDataFromBE(data);
+
+                }
+                //console.log(data)
+            }, error => {
+                console.log('Unable to parse data')
+                setCommunicationWithServer(false)
+            });
+    }
+
+
 
     const handleTextFromBEChange = () => {
         fetch("http://127.0.0.1:5000/getCMDSPanelData", {
@@ -59,7 +92,7 @@ export const CockpitControl = () => {
                     setDataFromBE(data);
 
                 }
-                console.log(data)
+                //console.log(data)
             }, error => {
                 console.log('Unable to parse data')
                 setCommunicationWithServer(false)
@@ -109,52 +142,20 @@ export const CockpitControl = () => {
             .then(response => response.json())
             .then(data => console.log(data));
 
-        //prepareTest()
-
-        // console.log("handleSendCMDSCommand - rwrSwitch received as " + rwrSwitch)
-        // fetch("http://127.0.0.1:5000/setCMDSPanelData", {
-        //     method: 'Post',
-        //     headers: {
-        //         'Content-Type': 'application/json',
-        //         'accept': '*/*'
-        //     },
-        //     body: JSON.stringify(
-        //         {
-        //             "RWR_SWITCH": rwrSwitch === true ? "True" : "False",
-        //             "JMR_SWITCH": "True",
-        //             "MWS_SWITCH": "True",
-        //             "SWITCH_01": "True",
-        //             "SWITCH_02": "True",
-        //             "SWITCH_CH": "True",
-        //             "SWITCH_FL": "True",
-        //             "SWITCH_JETT": "True",
-        //             "KNOB_PRGM": "True",
-        //             "KNOB_MODE": "True"
-        //         })
-        // });
     }
 
-    const handleSendCommand = (pump1: boolean, pump2: boolean, xferpump: boolean, valve: boolean) => {
 
+    const handleSendInteriorLightsCommand = (arrVal: string[]) => {
         console.log(`Handle Click On Play ...`);
-
+        console.log(arrVal)
         const request = {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                RWR_SWITCH: 'True',
-                JMR_SWITCH: 'True',
-                MWS_SWITCH: 'True',
-                SWITCH_01: 'True',
-                SWITCH_02: 'True',
-                SWITCH_CH: 'True',
-                SWITCH_FL: 'True',
-                SWITCH_JETT: 'True',
-                KNOB_PRGM: 'True',
-                KNOB_MODE: 'True'
+                NORMLTG_LIGHT: arrVal[0]
             })
         };
-        fetch("http://127.0.0.1:5000/setCMDSPanelData", request)
+        fetch("http://127.0.0.1:5000/setInteriorLightPanelData", request)
             .then(response => response.json())
             .then(data => console.log(data));
     }
@@ -193,7 +194,7 @@ export const CockpitControl = () => {
                             <FuelPanel cockpitControlState={dataFromBE} {...{ handleSendFuelCommand }} />
                         </FuelPanelContainer> */}
                         <InteriorLightPanelContainer>
-                            <InteriorLightPanel debugMode={debugMode} cockpitControlState={dataFromBE} />
+                            <InteriorLightPanel debugMode={debugMode} cockpitControlState={interiorLightsdataFromBE} {...{ handleSendInteriorLightsCommand }} />
                         </InteriorLightPanelContainer>
                         <EPUFuelPanelContainer>
                             <EPUFuelPanel cockpitControlState={dataFromBE} />

@@ -100,7 +100,7 @@
     {
         "key": "6",
         "type": "Switch3Ways",
-        "beckend_name":"LIGHTS_MODE",
+        "beckend_name":"NORMLTG_LIGHT",
         "row":"1",
         "column":"1",
         "width": "90",

@@ -124,7 +124,7 @@ const InteriorLightPanel = (props) => {
                     scale={props.scale}
                     change={getBlinkingButtonsValue(props.buttonData)}
                     //state={getStateValue(props.buttonData.beckend_name)}
-                    state={"center"}
+                    state={get3StatesValue(props.buttonData.beckend_name)}
                     data={props.buttonData}
                     name={props.buttonData.beckend_name}
                     onClick={handleOnClick} />
@@ -253,82 +253,32 @@ const InteriorLightPanel = (props) => {
         } else {
             return "NA"
         }
-        
+
     }
 
     const handleOnClick = (e) => {
-        console.log('Inrerior Lights:Panel => On Click ...')
-        // console.log(e)
-        // console.log(getStateValue(e))
-        // console.log(e.pageY)
-        // console.log(e.target.y)
-        // console.log(e.pageY - e.target.y)
-        // console.log(e.target.clientHeight)
+        console.log('Inrerior Lights:Panel => On mouse down ...', e.target.id, " on ", e.target.ariaLabel);
 
-        // if (e.pageY - e.target.y < e.target.clientHeight / 3) {
-        //     console.log("Upper Third on " + e.target.name)
-        // } else if (e.pageY - e.target.y > e.target.clientHeight * 2 / 3) {
-        //     console.log("Lower Third on " + e.target.name)
-        // } else {
-        //     console.log("Center on " + e.target.name)
-        // }
+        let value = "";
+        if (e.target.ariaLabel === "NORMLTG_LIGHT") {
+            switch (e.target.id) {
+                case "1":
+                    value = "up";
+                    break;
+                case "2":
+                    value = "center";
+                    break;
+                case "3":
+                    value = "down";
+                    break;
+                default:
+                    break;
+            }
+        }
 
-
-        //["RWR_SWITCH(0)","JMR_SWITCH(1)","MWS_SWITCH(2)","SWITCH_01(3)","SWITCH_02(4)", "SWITCH_CH(5)","SWITCH_FL(6)","SWITCH_JETT(7)","KNOB_PRGM(8)","KNOB_MODE(9)"]
-        //["RWR_SWITCH","JMR_SWITCH","MWS_SWITCH","SWITCH_01","SWITCH_02", "SWITCH_CH","SWITCH_FL","SWITCH_JETT","KNOB_PRGM","KNOB_MODE"]
-
-        // let prgmKnobVal = getStringValue("KNOB_PRGM");
-        // console.log(prgmKnobVal, e.target.name)
-        // if (e.target.name === "KNOB_PRGM") {
-        //     if (e.pageX - e.target.x > e.target.clientWidth / 2) {
-        //         prgmKnobVal = prgmKnobVal === 'bit' ? '1' : prgmKnobVal === '1' ? '2' : prgmKnobVal === '2' ? '3' : prgmKnobVal === '3' ? '4' : '4';
-        //     } else {
-        //         prgmKnobVal = prgmKnobVal === '4' ? '3' : prgmKnobVal === '3' ? '2' : prgmKnobVal === '2' ? '1' : prgmKnobVal === '1' ? 'bit' : 'bit';
-        //     }
-        // }
-
-        // let modeKnobVal = getStringValue("KNOB_MODE");
-        // console.log(modeKnobVal, e.target.name)
-        // if (e.target.name === "KNOB_MODE") {
-        //     if (e.pageX - e.target.x > e.target.clientWidth / 2) {
-        //         modeKnobVal = modeKnobVal === 'off' ? 'stby' : modeKnobVal === 'stby' ? 'man' : modeKnobVal === 'man' ? 'semi' : modeKnobVal === 'semi' ? 'auto' : modeKnobVal === 'auto' ? 'byp' : 'byp';
-        //     } else {
-        //         modeKnobVal = modeKnobVal === 'byp' ? 'auto' : modeKnobVal === 'auto' ? 'semi' : modeKnobVal === 'semi' ? 'man' : modeKnobVal === 'man' ? 'stby' : modeKnobVal === 'stby' ? 'off' : 'off';
-        //     }
-        // }
-
-
-        // let switchVal = getStateValue(e.target.name)
-        // if ((switchVal === true && (e.pageY - e.target.y) > (e.target.clientHeight / 2)) ||
-        //     (switchVal === false && (e.pageY - e.target.y) <= (e.target.clientHeight / 2))) {
-        //     switchVal = !switchVal;
-        // }
-
-        // let arrVal = [
-        //     getStateValue("RWR_SWITCH") === true ? "True" : "False",
-        //     getStateValue("JMR_SWITCH") === true ? "True" : "False",
-        //     getStateValue("MWS_SWITCH") === true ? "True" : "False",
-        //     getStateValue("SWITCH_01") === true ? "True" : "False",
-        //     getStateValue("SWITCH_02") === true ? "True" : "False",
-        //     getStateValue("SWITCH_CH") === true ? "True" : "False",
-        //     getStateValue("SWITCH_FL") === true ? "True" : "False",
-        //     getStateValue("SWITCH_JETT") === true ? "True" : "False",
-        //     prgmKnobVal, //getStringValue("KNOB_PRGM"),
-        //     modeKnobVal //getStringValue("KNOB_MODE")
-        // ]
-
-        // let indexVal = e.target.name === "RWR_SWITCH" ? 0 : e.target.name === "JMR_SWITCH" ? 1 :
-        //                 e.target.name === "MWS_SWITCH" ? 2 : e.target.name === "SWITCH_01" ? 3 :
-        //                 e.target.name === "SWITCH_02" ? 4 : e.target.name === "SWITCH_CH" ? 5 :
-        //                 e.target.name === "SWITCH_FL" ? 6 : e.target.name === "SWITCH_JETT" ? 7 :
-        //                 e.target.name === "KNOB_PRGM" ? 8 : e.target.name === "KNOB_MODE" ? 9 : -1;
-
-
-        // if (indexVal > -1 && indexVal < 8) {
-        //     arrVal[indexVal] = switchVal === true ? "True" : "False";
-        // } 
-
-        //props.handleSendCMDSCommand(arrVal)
+        let arrVal = [value];
+        console.log(arrVal)
+        props.handleSendInteriorLightsCommand(arrVal)
 
     }
 
@@ -336,16 +286,13 @@ const InteriorLightPanel = (props) => {
     let tempInterval;
 
     const handleOnMouseDown = (e) => {
-        let i =0;
+        let i = 0;
         console.log('Inrerior Lights:Panel => On mouse down ...', e.target.id, " on ", e.target.ariaLabel);
         tempInterval = setInterval(() => {
             console.log("holding mouse down", i);
             i = i + 1;
         }, 1000);
-        // if (i > 5) {
-        //     console.log("clear interval", i);
-        //     clearTimeout(tempInterval);
-        // }
+
     }
 
     const handleOnMouseUp = (e) => {
@@ -391,9 +338,9 @@ const InteriorLightPanel = (props) => {
                                                 "justify-content": "start",
                                                 "border": `${props.debugMode === true ? "1px solid #4a4d56" : "none"}`
                                             }}
-                                         onClick={buttonData.type === "AnalogKnob" ? null: handleOnClick}
-                                         onMouseDown={buttonData.type === "AnalogKnob" ? handleOnMouseDown : null}
-                                         onMouseUp={buttonData.type === "AnalogKnob" ? handleOnMouseUp : null}>
+                                            onClick={buttonData.type === "AnalogKnob" ? null : handleOnClick}
+                                            onMouseDown={buttonData.type === "AnalogKnob" ? handleOnMouseDown : null}
+                                            onMouseUp={buttonData.type === "AnalogKnob" ? handleOnMouseUp : null}>
                                             {props.debugMode === false ? null : getDebugData(buttonData, tile)}
                                         </div>
                                     })
