@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import _ from 'lodash';
 
 import configData from "../../../../data/InteriorLightData.json"
@@ -276,28 +276,47 @@ const InteriorLightPanel = (props) => {
             }
         }
 
-        let arrVal = [value];
-        console.log(arrVal)
-        props.handleSendInteriorLightsCommand(arrVal)
+        sendNewValues("NORMLTG_LIGHT", value);
 
     }
 
 
-    let tempInterval;
+    var tempInterval = useRef();
+    let i = Number(getAnalogValue("FLOOD_CONSOLES_LIGHT"));
 
     const handleOnMouseDown = (e) => {
-        let i = 0;
-        console.log('Inrerior Lights:Panel => On mouse down ...', e.target.id, " on ", e.target.ariaLabel);
-        tempInterval = setInterval(() => {
-            console.log("holding mouse down", i);
-            i = i + 1;
-        }, 1000);
 
+
+        console.log('Inrerior Lights:Panel => On mouse down ...', e.target.id, " on ", e.target.ariaLabel);
+        console.log(tempInterval)
+        tempInterval.current = setInterval(() => {
+            console.log("holding mouse down", i);
+            if (e.target.id === "2") {
+                i = i + 1;
+                if (i > 100) i = 100;
+            }
+            if (e.target.id === "1") {
+                i = i - 1;
+                if (i < 0) i = 0;
+            }
+            sendNewValues("FLOOD_CONSOLES_LIGHT", String(i))
+        }, 50);
     }
 
     const handleOnMouseUp = (e) => {
         console.log('Inrerior Lights:Panel => On mouse up ...', e.target.id, " on ", e.target.ariaLabel);
-        tempInterval && clearInterval(tempInterval);
+        clearInterval(tempInterval.current);
+    }
+
+    const sendNewValues = (name, value) => {
+        let arrVal = ["", ""];    
+        if (name === "NORMLTG_LIGHT") {
+            arrVal = [value, getAnalogValue("FLOOD_CONSOLES_LIGHT")];
+        } else if (name === "FLOOD_CONSOLES_LIGHT") {
+            arrVal = [get3StatesValue("NORMLTG_LIGHT"), value];
+        }
+        console.log(arrVal)
+        props.handleSendInteriorLightsCommand(arrVal)
     }
 
 

@@ -50,7 +50,7 @@
     {
         "key": "3",
         "type": "AnalogKnob",
-        "beckend_name":"FLOOD_CONSOLES",
+        "beckend_name":"FLOOD_CONSOLES_LIGHT",
         "row":"1",
         "column":"1",
         "width": "150",

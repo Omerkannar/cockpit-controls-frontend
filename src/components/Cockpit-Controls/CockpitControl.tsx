@@ -23,7 +23,7 @@ export const CockpitControl = () => {
     const [communicationWithServer, setCommunicationWithServer] = useState(false)
     const [dataFromBE, setDataFromBE] = React.useState({});
     const [interiorLightsdataFromBE, setInteriorLightsDataFromBE] = React.useState({});
-    const debugMode: boolean = true;
+    const debugMode: boolean = false;
 
 
     useEffect(() => {
@@ -152,7 +152,8 @@ export const CockpitControl = () => {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                NORMLTG_LIGHT: arrVal[0]
+                NORMLTG_LIGHT: arrVal[0],
+                FLOOD_CONSOLES_LIGHT: arrVal[1]
             })
         };
         fetch("http://127.0.0.1:5000/setInteriorLightPanelData", request)
