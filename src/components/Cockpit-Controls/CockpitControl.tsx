@@ -23,7 +23,7 @@ export const CockpitControl = () => {
     const [communicationWithServer, setCommunicationWithServer] = useState(false)
     const [dataFromBE, setDataFromBE] = React.useState({});
     const [interiorLightsdataFromBE, setInteriorLightsDataFromBE] = React.useState({});
-    const debugMode: boolean = false;
+    const debugMode: boolean = true;
 
 
     useEffect(() => {

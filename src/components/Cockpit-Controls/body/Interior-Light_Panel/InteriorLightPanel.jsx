@@ -288,16 +288,23 @@ const InteriorLightPanel = (props) => {
 
 
         console.log('Inrerior Lights:Panel => On mouse down ...', e.target.id, " on ", e.target.ariaLabel);
-        console.log(tempInterval)
+
+
+        console.log(configData)
+        const filtered = configData.filter(key => {
+            return (key.beckend_name === "FLOOD_CONSOLES_LIGHT")
+        })
+        console.log(filtered)
+
         tempInterval.current = setInterval(() => {
             console.log("holding mouse down", i);
             if (e.target.id === "2") {
-                i = i + 1;
-                if (i > 100) i = 100;
+                i = i + Number(filtered[0]?.increment_step);
+                if (i > Number(filtered[0]?.max_value)) i = Number(filtered[0]?.max_value);
             }
             if (e.target.id === "1") {
-                i = i - 1;
-                if (i < 0) i = 0;
+                i = i - Number(filtered[0]?.increment_step);
+                if (i < Number(filtered[0]?.min_value)) i = Number(filtered[0]?.min_value);
             }
             sendNewValues("FLOOD_CONSOLES_LIGHT", String(i))
         }, 50);
@@ -309,7 +316,7 @@ const InteriorLightPanel = (props) => {
     }
 
     const sendNewValues = (name, value) => {
-        let arrVal = ["", ""];    
+        let arrVal = ["", ""];
         if (name === "NORMLTG_LIGHT") {
             arrVal = [value, getAnalogValue("FLOOD_CONSOLES_LIGHT")];
         } else if (name === "FLOOD_CONSOLES_LIGHT") {
